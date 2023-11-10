@@ -88,6 +88,10 @@ def load_data(dataset, pm_only=False, indels=False, holdout='targets', scale_non
         data = data[data.guide_type == 'PM']
     elif not indels:
         data = data[data.guide_type.isin(['PM', 'SM', 'DM', 'RDM', 'TM', 'RTM'])]
+    else:
+    # Add dashes and ensure guide and target match
+        data['guide'] = '-'
+        data['target'] = '-'
 
     # set the folds
     if holdout == 'genes':
@@ -235,11 +239,12 @@ def model_inputs(data, context, *, scalar_feats=(), target_feats=(), include_rep
 
     # add target context
     max_len_5p = max(tokens_5p.bounding_shape()[1], context_5p)
-    tokens_5p = pad_sequences(tokens_5p.to_list(), maxlen=max_len_5p, dtype='uint8', padding='pre', value=255)
-    tokens_5p = tf.constant(tokens_5p[:, tokens_5p.shape[1]-context_5p:tokens_5p.shape[1]])
+    tokens_5p = pad_sequences(tokens_5p.to_list(), maxlen=None, dtype='uint8', padding='pre', value=255)
+    tokens_5p = tf.constant(tokens_5p[:, tokens_5p.shape[1] - context_5p : tokens_5p.shape[1]])
+    
     max_len_3p = max(tokens_3p.bounding_shape()[1], context_3p)
-    tokens_3p = pad_sequences(tokens_3p.to_list(), maxlen=max_len_3p, dtype='uint8', padding='post', value=255)
-    tokens_3p = tf.constant(tokens_3p[:, :context_3p])
+    tokens_3p = pad_sequences(tokens_3p.to_list(), maxlen=None, dtype='uint8', padding='post', value=255)
+    tokens_3p = tf.constant(tokens_3p[:, : context_3p])
 
     # assemble dictionary of core model inputs
     inputs = {
