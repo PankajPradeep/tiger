@@ -25,11 +25,11 @@ class OneHotInputParser(Layer):
         self.guide_len = (self.target_len if pad_guide_seq else target_len) if use_guide_seq else 0
 
     def call(self, x):
-        target_one_hot = x[:, : 4 * self.target_len]
-        target_one_hot = tf.reshape(target_one_hot, [tf.shape(x)[0], self.target_len, 4])
-        guide_one_hot = x[:, 4 * self.target_len: 4 * (self.target_len + self.guide_len)]
-        guide_one_hot = tf.reshape(guide_one_hot, [tf.shape(x)[0], self.guide_len, 4])
-        non_sequence_features = x[:, 4 * (self.target_len + self.guide_len):]
+        target_one_hot = x[:, :5 * self.target_len]
+        target_one_hot = tf.reshape(target_one_hot, [tf.shape(x)[0], self.target_len, 5])  
+        guide_one_hot = x[:, 5 * self.target_len:5 * (self.target_len + self.guide_len)]
+        guide_one_hot = tf.reshape(guide_one_hot, [tf.shape(x)[0], self.guide_len, 5])  
+        non_sequence_features = x[:, 5 * (self.target_len + self.guide_len):]
 
         return target_one_hot, guide_one_hot, non_sequence_features
 
