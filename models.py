@@ -42,8 +42,10 @@ class OneHotSequenceModel(SequenceModelWithNonSequenceFeatures):
     def pack_inputs(self, data: dict, scalar_feats: Union[list, tuple] = tuple(SCALAR_FEATS)):
 
         # one-hot encode, flatten, and concatenate target (and context) sequence tokens
-        x = tf.concat([data['5p_tokens'], data['target_tokens'], data['3p_tokens']], axis=1)
-        x = tf.reshape(tf.one_hot(x, depth=4), [len(data['target_tokens']), -1])
+        # one-hot encode, flatten, and concatenate target (and context) sequence tokens
+        x = tf.concat([data['5p_tokens'], tf.zeros_like(data['5p_tokens'][:, :1]), data['target_tokens'], tf.zeros_like(data['3p_tokens'][:, :1]), data['3p_tokens']], axis=1)
+        x = tf.reshape(tf.one_hot(x, depth=5), [len(data['target_tokens']), -1]) 
+
 
         # if we are using guide sequence, do the same to those tokens (but pad them first to match target + context)
         if self.input_parser.guide_len > 0:
@@ -53,7 +55,7 @@ class OneHotSequenceModel(SequenceModelWithNonSequenceFeatures):
             pad_5p = 255 * tf.ones([data['guide_tokens'].shape[0], data['5p_tokens'].shape[1]], dtype=data_type)
             pad_3p = 255 * tf.ones([data['guide_tokens'].shape[0], data['3p_tokens'].shape[1]], dtype=data_type)
             guide_tokens = tf.concat([pad_5p, data['guide_tokens'], pad_3p], axis=1)
-            x = tf.concat([x, tf.reshape(tf.one_hot(guide_tokens, depth=4), [len(data['guide_tokens']), -1])], axis=1)
+            x = tf.concat([x, tf.reshape(tf.one_hot(guide_tokens, depth=5), [len(data['guide_tokens']), -1])], axis=1)
 
         # concatenate and log available non-sequence features
         x = self.concatenate_non_sequence_features(data, x, scalar_feats)
@@ -113,8 +115,8 @@ class Tiger2D(OneHotSequenceModel):
                 input_parser=self.input_parser,
                 sequence_layers=[
                     layers.AlignOneHotEncoding2D(use_guide_seq),
-                    tf.keras.layers.Conv2D(filters=32, kernel_size=(4, 4), activation='relu', padding='same'),
-                    tf.keras.layers.Conv2D(filters=32, kernel_size=(4, 4), activation='relu', padding='same'),
+                    tf.keras.layers.Conv2D(filters=32, kernel_size=(5, 5), activation='relu', padding='same'),
+                    tf.keras.layers.Conv2D(filters=32, kernel_size=(5, 5), activation='relu', padding='same'),
                     tf.keras.layers.MaxPool2D(pool_size=(1, 2), padding='same'),
                     tf.keras.layers.Flatten(),
                     tf.keras.layers.Dropout(0.25),
