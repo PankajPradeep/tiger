@@ -26,7 +26,7 @@ available_features = set(SCALAR_FEATS).intersection(set(data.columns))
 data['fold'] = np.random.choice(np.array(['training', 'validation']), p=[0.9, 0.1], size=len(data))
 
 # normalize data
-normalizer = get_normalization_object(args.normalization)(data, **args.normalization_kwargs)
+normalizer = get_normalization_object(args.normalization)(data, indels=args.indels, **args.normalization_kwargs)
 data = normalizer.normalize_targets(data)
 
 # set up test set similarly, if requested
@@ -35,7 +35,7 @@ if args.test_dataset:
     test_data = label_and_filter_data(*test_data, args.nt_quantile, args.test_filter_method)
     available_features = available_features.intersection(set(test_data.columns))
     if set(LFC_COLS).issubset(test_data.columns):
-        test_set_normalizer = get_normalization_object(args.normalization)(test_data, **args.normalization_kwargs)
+        test_set_normalizer = get_normalization_object(args.normalization)(test_data, indels=args.indels, **args.normalization_kwargs)
         test_data = test_set_normalizer.normalize_targets(test_data)
     else:
         test_set_normalizer = None
@@ -88,7 +88,6 @@ if test_data is not None:
     normalized_columns = ['observed_lfc', 'observed_pm_lfc', 'predicted_lfc', 'predicted_pm_lfc']
     df_tap = test_model(model, model_inputs(test_data, args.context, scalar_feats=available_features))
 
-    # if we have a test set normalizer
     if test_set_normalizer is not None:
         df_tap = test_set_normalizer.denormalize_targets_and_predictions(df_tap)
         print('Test performance:')
@@ -96,7 +95,6 @@ if test_data is not None:
         df_performance.to_pickle(os.path.join(pred_path, 'performance.pkl'))
     else:
         df_tap = df_tap.rename(columns=dict(zip(normalized_columns, [s + '_normalized' for s in normalized_columns])))
-
     # save predictions
     df_tap.to_pickle(os.path.join(pred_path, 'predictions.pkl'))
     df_tap.to_csv(os.path.join(pred_path, 'predictions.csv'), index=False)
