@@ -5,23 +5,23 @@ import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
 
 
-def get_normalization_object(method: str, indels: bool = False, **kwargs):
+def get_normalization_object(method: str):
     if method == 'No':
-        return NoNormalizationWithIndels if indels else NoNormalization
+        return NoNormalization
     elif method == 'FrequentistQuantile':
-        return FrequentistQuantileNormalizationWithIndels(indels=indels, **kwargs)
+        return FrequentistQuantileNormalization
     elif method == 'UnitInterval':
-        return UnitIntervalNormalizationWithIndels(indels=indels, **kwargs)
+        return UnitIntervalNormalization
     elif method == 'UnitVariance':
-        return UnitVarianceNormalizationWithIndels(indels=indels, **kwargs)
+        return UnitVarianceNormalization
     elif method == 'UnitMeanOfSquares':
-        return UnitMeanOfSquaresNormalizationWithIndels(indels=indels, **kwargs)
+        return UnitMeanOfSquaresNormalization
     elif method == 'ZeroMeanUnitVariance':
-        return ZeroMeanUnitVarianceNormalizationWithIndels(indels=indels, **kwargs)
+        return ZeroMeanUnitVarianceNormalization
     elif method == 'DepletionRatio':
-        return DepletionRatioNormalizationWithIndels(indels=indels, **kwargs)
+        return DepletionRatioNormalization
     elif method == 'QuantileMatching':
-        return QuantileMatchingNormalizationWithIndels(indels=indels, **kwargs)
+        return QuantileMatchingNormalization
     else:
         raise NotImplementedError
 
