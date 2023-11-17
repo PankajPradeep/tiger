@@ -68,12 +68,10 @@ class Normalization(object):
 
 
 class NoNormalization(Normalization):
-    def __init__(self, df: pd.DataFrame, indels: bool = True):
         super().__init__(df)
         self.original_lfc = df[['gene', 'guide_seq', 'observed_lfc']].copy().set_index(['gene', 'guide_seq'])
         assert not self.original_lfc.index.has_duplicates
-        self.indels = indels
-
+        self.indels = kwargs.get('indels', False)
 
     def normalize_targets(self, df: pd.DataFrame):
         if self.indels:
