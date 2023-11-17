@@ -74,7 +74,7 @@ class NoNormalization(Normalization):
     def normalize_targets(self, df: pd.DataFrame):
         if self.indels:
             # Modify normalization logic for indels
-            pass
+                pass
         return df
 
     def denormalize_observations(self, df: pd.DataFrame):
