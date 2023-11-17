@@ -3,9 +3,10 @@ from tensorflow.keras.layers import Layer
 
 
 class SequenceSequentialWithNonSequenceBypass(tf.keras.Sequential):
-    def __init__(self, layers=None, name=None, indels=False, **kwargs):
+    def __init__(self, input_parser, sequence_layers, name=None, **kwargs):
         super(SequenceSequentialWithNonSequenceBypass, self).__init__(layers, name=name, **kwargs)
-        self.indels = indels
+        self.input_parser = input_parser
+        self.sequence_layers = sequence_layers
 
     def call(self, x, **kwargs):
         *sequence_representation, non_sequence_features = self.input_parser.call(x)
