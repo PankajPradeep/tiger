@@ -118,7 +118,7 @@ def load_data(dataset, pm_only=False, indels=True, holdout='targets', scale_non_
     return data, data_nt
 
 
-def label_and_filter_data(data, data_nt, nt_quantile=0.01, method='MinActiveRatio', min_active_ratio=0.1, quiet=True):
+def label_and_filter_data(data, data_nt, nt_quantile=0.01, method='MinActiveRatio', min_active_ratio=0.1, quiet=True, indels=True):
     """
     Labels guide activity as active (LFC < specified non-targeting quantile) and filters our non-essential genes
     :param data: screen data as a DataFrame
