@@ -5,13 +5,13 @@ import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
 
 
-def get_normalization_object(method: str):
+def get_normalization_object(method: str, indels: bool = False, **kwargs):
     if method == 'No':
-        return NoNormalization
+        return NoNormalizationWithIndels if indels else NoNormalization
     elif method == 'FrequentistQuantile':
-        return FrequentistQuantileNormalization
+        return FrequentistQuantileNormalizationWithIndels(indels=indels, **kwargs)
     elif method == 'UnitInterval':
-        return UnitIntervalNormalization
+        return UnitIntervalNormalizationWithIndels(indels=indels, **kwargs)
     elif method == 'UnitVariance':
         return UnitVarianceNormalization
     elif method == 'UnitMeanOfSquares':
