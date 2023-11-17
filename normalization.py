@@ -132,7 +132,7 @@ class FrequentistQuantileNormalization(LocationScaleNormalization):
 
 class UnitIntervalNormalization(LocationScaleNormalization):
 
-    def __init__(self, df: pd.DataFrame, indels: bool = True, q_neg: int, q_pos: int, squash: bool = False):
+    def __init__(self, df: pd.DataFrame, q_neg: int, q_pos: int, indels: bool = True, squash: bool = False):
         assert q_neg < q_pos
         assert isinstance(squash, bool)
         super().__init__(df)
