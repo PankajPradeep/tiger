@@ -2,11 +2,9 @@ import tensorflow as tf
 from tensorflow.keras.layers import Layer
 
 
-class SequenceSequentialWithNonSequenceBypass(Layer):
-    def __init__(self, input_parser: Layer, sequence_layers: [Layer]):
-        super().__init__()
-        self.input_parser = input_parser
-        self.sequence_layers = sequence_layers
+class SequenceSequentialWithNonSequenceBypass(tf.keras.Sequential):
+    def __init__(self, layers=None, name=None, indels=False, **kwargs):
+        super(SequenceSequentialWithNonSequenceBypass, self).__init__(layers, name=name, **kwargs)
         self.indels = indels
 
     def call(self, x, **kwargs):
