@@ -114,9 +114,11 @@ class LocationScaleNormalization(Normalization):
 
 class FrequentistQuantileNormalization(LocationScaleNormalization):
 
-    def __init__(self, df: pd.DataFrame, *, q_loc: int, q_neg: int, q_pos: int):
+    def __init__(self, df: pd.DataFrame, *, q_loc: int, q_neg: int, q_pos: int, indels: bool = False):
         assert q_neg < q_loc < q_pos
         super().__init__(df)
+        self.output_fn = 'linear'
+        self.indels = indels
 
         # derive requisite quantiles for each gene
         df = df[df.guide_type == 'PM'].groupby('gene')['observed_lfc']
