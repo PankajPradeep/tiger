@@ -92,6 +92,7 @@ if __name__ == '__main__':
     parser.add_argument('--random_seed', type=int, default=12345, help='random number seed')
     parser.add_argument('--retrain', action='store_true', default=False, help='retrain TIGER')
     parser.add_argument('--training_ratio', type=float, default=0.9, help='ratio of data for training')
+    parser.add_argument('--indels', action='store_true', default=False, help='include targets with indels')
     args = utils.parse_common_arguments(parser)
     assert 0 < args.training_ratio < 1
 
@@ -101,7 +102,7 @@ if __name__ == '__main__':
         tf.keras.utils.set_random_seed(args.random_seed)
 
     # load, label, filter, and split data
-    data = load_data(dataset='off-target', pm_only=False, indels=False)
+    data = load_data(dataset='off-target', pm_only=False, indels=args.indels)
     data = label_and_filter_data(*data, method='NoFilter')
     data = training_validation_split_targets(data, train_ratio=0.9)
 
