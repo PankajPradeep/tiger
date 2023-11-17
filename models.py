@@ -246,7 +246,7 @@ def build_model(name, target_len, context_5p, context_3p, use_guide_seq, loss_fn
         model = Tiger1D(target_len, context_5p, context_3p, use_guide_seq, **kwargs)
         optimizer = tf.optimizers.Adam(1e-3)
     elif name == 'Tiger2D':
-        model = Tiger2D(target_len, context_5p, context_3p, use_guide_seq, **kwargs)
+        model = Tiger2D(target_len, context_5p, context_3p, use_guide_seq, indels=args.indels, **kwargs)
         optimizer = tf.optimizers.Adam(1e-3)
     elif name == 'TargetSequenceWithRBP':
         model = TargetSequenceWithRBP(target_len, context_5p, context_3p, **kwargs)
