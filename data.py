@@ -7,7 +7,7 @@ from statsmodels.stats.diagnostic import lilliefors
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 
 # project-wide nucleotide tokens
-NUCLEOTIDE_TOKENS = dict(zip(['A', 'C', 'G', 'T'], [0, 1, 2, 3]))
+NUCLEOTIDE_TOKENS = dict(zip(['A', 'C', 'G', 'T','-'], [0, 1, 2, 3,4]))
 
 # relevant columns
 INDEX_COLS = ['gene', 'guide_id']
@@ -61,13 +61,9 @@ UNIT_SCALED_FEATS = ['loc_utr_5p', 'loc_cds', 'loc_utr_3p',
                      'direct_repeat', 'g_quad',
                      'perc_gene_nuc', 'perc_junc_nuc', 'perc_junc_use']
 
+NUCLEOTIDE_TOKENS = dict(zip(['A', 'C', 'G', 'T','-'], [0, 1, 2, 3,4]))
 
-def sequence_complement(sequence: str) -> str:
-    nt_complement = dict(zip(['A', 'C', 'G', 'T'], ['T', 'G', 'C', 'A']))
-    return ''.join([nt_complement[nt] for nt in sequence])
-
-
-def load_data(dataset, pm_only=False, indels=False, holdout='targets', scale_non_seq_feats=False):
+def load_data(dataset, pm_only=False, indels=True, holdout='targets', scale_non_seq_feats=False):
     """
     Loads specified dataset and its corresponding non-targeting data (if it exists)
     :param dataset: which dataset to use
@@ -138,9 +134,13 @@ def label_and_filter_data(data, data_nt, nt_quantile=0.01, method='MinActiveRati
 
         # compute mean of replicates
         data_nt['lfc'] = data_nt[LFC_COLS].mean(axis=1)
-
+        # ...
+        if indels:
+            threshold = norm.ppf(q=nt_quantile, loc=data_nt['lfc'].mean(), scale=data_nt['lfc'].std())
+        else:
+            threshold = norm.ppf(q=nt_quantile, loc=data_nt['lfc'].mean(), scale=data_nt['lfc'].std())
         # set active threshold based on quantile of non-targeting distribution (assumed to be normal)
-        threshold = norm.ppf(q=nt_quantile, loc=data_nt['lfc'].mean(), scale=data_nt['lfc'].std())
+        $threshold = norm.ppf(q=nt_quantile, loc=data_nt['lfc'].mean(), scale=data_nt['lfc'].std())
         if not quiet:
             _, p_val = lilliefors(data_nt['lfc'].values)
             print('Lilliefors p-value of NT replicate medians: {:.4e}'.format(p_val))
