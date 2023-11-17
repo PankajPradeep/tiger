@@ -19,7 +19,7 @@ def get_normalization_object(method: str, indels: bool = False, **kwargs):
     elif method == 'ZeroMeanUnitVariance':
         return ZeroMeanUnitVarianceNormalizationWithIndels(indels=indels, **kwargs)
     elif method == 'DepletionRatio':
-        return DepletionRatioNormalizationWithIndels(indels=indels, **kwargs)Indels
+        return DepletionRatioNormalizationWithIndels(indels=indels, **kwargs)
     elif method == 'QuantileMatching':
         return QuantileMatchingNormalizationWithIndels(indels=indels, **kwargs)
     else:
