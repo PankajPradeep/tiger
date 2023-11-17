@@ -7,6 +7,7 @@ class SequenceSequentialWithNonSequenceBypass(Layer):
         super().__init__()
         self.input_parser = input_parser
         self.sequence_layers = sequence_layers
+        self.indels = indels
 
     def call(self, x, **kwargs):
         *sequence_representation, non_sequence_features = self.input_parser.call(x)
