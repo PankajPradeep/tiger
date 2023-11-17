@@ -1,10 +1,9 @@
 import tensorflow as tf
 from tensorflow.keras.layers import Layer
 
-
 class SequenceSequentialWithNonSequenceBypass(tf.keras.Sequential):
     def __init__(self, input_parser, sequence_layers, name=None, **kwargs):
-        super(SequenceSequentialWithNonSequenceBypass, self).__init__(layers, name=name, **kwargs)
+        super(SequenceSequentialWithNonSequenceBypass, self).__init__(sequence_layers, name=name, **kwargs)
         self.input_parser = input_parser
         self.sequence_layers = sequence_layers
 
@@ -16,7 +15,6 @@ class SequenceSequentialWithNonSequenceBypass(tf.keras.Sequential):
             else:
                 sequence_representation = layer(sequence_representation, **kwargs)
         return tf.concat([sequence_representation, non_sequence_features], axis=-1)
-
 
 class OneHotInputParser(Layer):
     def __init__(self, target_len: int, context_5p: int, context_3p: int, use_guide_seq: bool, pad_guide_seq: bool):
