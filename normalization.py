@@ -68,9 +68,10 @@ class Normalization(object):
 
 
 class NoNormalization(Normalization):
-    def __init__(self, df: pd.DataFrame):
+    def __init__(self, df: pd.DataFrame, indels: bool = True):
         super().__init__(df)
         self.output_fn = 'linear'
+        self.indels=indels
 
     def normalize_targets(self, df: pd.DataFrame):
         return df
@@ -129,7 +130,7 @@ class FrequentistQuantileNormalization(LocationScaleNormalization):
 
 class UnitIntervalNormalization(LocationScaleNormalization):
 
-    def __init__(self, df: pd.DataFrame, *, q_neg: int, q_pos: int, squash: bool):
+    def __init__(self, df: pd.DataFrame, indels: bool = True, q_neg: int, q_pos: int, squash: bool = False):
         assert q_neg < q_pos
         assert isinstance(squash, bool)
         super().__init__(df)
