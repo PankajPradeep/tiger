@@ -84,7 +84,7 @@ class OneHotSequenceModel(SequenceModelWithNonSequenceFeatures):
 
 
 class Tiger1D(OneHotSequenceModel):
-    def __init__(self, target_len: int, context_5p: int, context_3p: int, use_guide_seq: bool, **kwargs):
+    def __init__(self, target_len: int, context_5p: int, context_3p: int, use_guide_seq: bool, indels=False, **kwargs):
         OneHotSequenceModel.__init__(self, target_len, context_5p, context_3p, use_guide_seq, pad_guide_seq=True)
 
         self.model = tf.keras.Sequential(name='Tiger1D', layers=[
@@ -105,9 +105,8 @@ class Tiger1D(OneHotSequenceModel):
             tf.keras.layers.Dense(1, activation=kwargs.get('output_fn') or 'linear')
         ])
 
-
 class Tiger2D(OneHotSequenceModel):
-    def __init__(self, target_len: int, context_5p: int, context_3p: int, use_guide_seq: bool, **kwargs):
+    def __init__(self, target_len: int, context_5p: int, context_3p: int, use_guide_seq: bool, indels=False, **kwargs):
         OneHotSequenceModel.__init__(self, target_len, context_5p, context_3p, use_guide_seq, pad_guide_seq=True)
 
         self.model = tf.keras.Sequential(name='Tiger2D', layers=[
@@ -243,7 +242,7 @@ class TranscriptTransformer(TranscriptEmbeddingModel):
 
 def build_model(name, target_len, context_5p, context_3p, use_guide_seq, loss_fn, debug=False, **kwargs):
     if name == 'Tiger1D':
-        model = Tiger1D(target_len, context_5p, context_3p, use_guide_seq, **kwargs)
+        model = Tiger1D(target_len, context_5p, context_3p, use_guide_seq, indels=args.indels, **kwargs)
         optimizer = tf.optimizers.Adam(1e-3)
     elif name == 'Tiger2D':
         model = Tiger2D(target_len, context_5p, context_3p, use_guide_seq, indels=args.indels, **kwargs)
