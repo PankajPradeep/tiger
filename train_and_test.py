@@ -65,7 +65,7 @@ model = build_model(name=args.model,
                     loss_fn=args.loss,
                     debug=args.debug,
                     output_fn=normalizer.output_fn,
-                    args=args, **kwargs)
+                    args=args)
 model = train_model(model, train_data, valid_data, args.batch_size)
 df_tap = test_model(model, valid_data)
 
