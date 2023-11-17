@@ -27,10 +27,8 @@ def get_normalization_object(method: str, indels: bool = False, **kwargs):
 
 
 class Normalization(object):
-    def __init__(self, df: pd.DataFrame):
-        self.original_lfc = df[['gene', 'guide_seq', 'observed_lfc']].copy().set_index(['gene', 'guide_seq'])
-        assert not self.original_lfc.index.has_duplicates
-
+    def __init__(self, df: pd.DataFrame, indels=False):
+        self.indels = indels
     def normalize_targets(self, df: pd.DataFrame):
         raise NotImplementedError
 
