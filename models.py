@@ -240,7 +240,7 @@ class TranscriptTransformer(TranscriptEmbeddingModel):
         ])
 
 
-def build_model(name, target_len, context_5p, context_3p, use_guide_seq, loss_fn,args, debug=False, **kwargs):
+def build_model(name, target_len, context_5p, context_3p, use_guide_seq, loss_fn, debug=False, **kwargs):
     if name == 'Tiger1D':
         model = Tiger1D(target_len, context_5p, context_3p, use_guide_seq, indels=args.indels, **kwargs)
         optimizer = tf.optimizers.Adam(1e-3)
