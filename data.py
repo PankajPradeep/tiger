@@ -190,7 +190,7 @@ def training_validation_split_targets(data: pd.DataFrame, train_ratio: float = 0
     return data
 
 
-def model_inputs(data, context, *, scalar_feats=(), target_feats=(), include_replicates=False, max_context=100):
+def model_inputs(data, context, *, scalar_feats=(), target_feats=(), include_replicates=False, max_context=100, indels=True):
     """
     Prepares a dictionary of model inputs and target values from the provided DataFrame
     :param data: panda's DataFrame containing model inputs and target values
