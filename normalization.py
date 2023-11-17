@@ -13,15 +13,15 @@ def get_normalization_object(method: str, indels: bool = False, **kwargs):
     elif method == 'UnitInterval':
         return UnitIntervalNormalizationWithIndels(indels=indels, **kwargs)
     elif method == 'UnitVariance':
-        return UnitVarianceNormalization
+        return UnitVarianceNormalizationWithIndels(indels=indels, **kwargs)
     elif method == 'UnitMeanOfSquares':
-        return UnitMeanOfSquaresNormalization
+        return UnitMeanOfSquaresNormalizationWithIndels(indels=indels, **kwargs)
     elif method == 'ZeroMeanUnitVariance':
-        return ZeroMeanUnitVarianceNormalization
+        return ZeroMeanUnitVarianceNormalizationWithIndels(indels=indels, **kwargs)
     elif method == 'DepletionRatio':
-        return DepletionRatioNormalization
+        return DepletionRatioNormalizationWithIndels(indels=indels, **kwargs)Indels
     elif method == 'QuantileMatching':
-        return QuantileMatchingNormalization
+        return QuantileMatchingNormalizationWithIndels(indels=indels, **kwargs)
     else:
         raise NotImplementedError
 
