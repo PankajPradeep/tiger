@@ -140,7 +140,7 @@ def label_and_filter_data(data, data_nt, nt_quantile=0.01, method='MinActiveRati
         else:
             threshold = norm.ppf(q=nt_quantile, loc=data_nt['lfc'].mean(), scale=data_nt['lfc'].std())
         # set active threshold based on quantile of non-targeting distribution (assumed to be normal)
-        $threshold = norm.ppf(q=nt_quantile, loc=data_nt['lfc'].mean(), scale=data_nt['lfc'].std())
+        #threshold = norm.ppf(q=nt_quantile, loc=data_nt['lfc'].mean(), scale=data_nt['lfc'].std())
         if not quiet:
             _, p_val = lilliefors(data_nt['lfc'].values)
             print('Lilliefors p-value of NT replicate medians: {:.4e}'.format(p_val))
